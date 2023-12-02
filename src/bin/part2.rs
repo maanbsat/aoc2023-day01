@@ -81,12 +81,10 @@ fn get_code(line: &str) -> Result<usize> {
 }
 
 fn main() -> Result<()> {
-    let f = File::open(PATH)?;
-    let lines = io::BufReader::new(f).lines();
-    let mut res: usize = 0;
-    for l in lines {
-        res += get_code(&l?)?;
-    }
+    let res: usize = io::BufReader::new(File::open(PATH)?)
+        .lines()
+        .map(|l| get_code(&l.unwrap()).unwrap())
+        .sum();
 
     println!("{}", res);
     Ok(())
@@ -99,5 +97,13 @@ mod tests {
         assert_eq!(super::get_code("eighthree").unwrap(), 83);
         assert_eq!(super::get_code("sevenine").unwrap(), 79);
         assert_eq!(super::get_code("oneight").unwrap(), 18);
+
+        assert_eq!(super::get_code("two1nine").unwrap(), 29);
+        assert_eq!(super::get_code("eightwothree").unwrap(), 83);
+        assert_eq!(super::get_code("abcone2threexyz").unwrap(), 13);
+        assert_eq!(super::get_code("xtwone3four").unwrap(), 24);
+        assert_eq!(super::get_code("4nineeightseven2").unwrap(), 42);
+        assert_eq!(super::get_code("zoneight234").unwrap(), 14);
+        assert_eq!(super::get_code("7pqrstsixteen").unwrap(), 76);
     }
 }

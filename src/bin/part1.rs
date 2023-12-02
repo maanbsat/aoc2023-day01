@@ -21,12 +21,10 @@ fn get_code(line: &str) -> Result<usize> {
 }
 
 fn main() -> Result<()> {
-    let f = File::open(PATH)?;
-    let lines = io::BufReader::new(f).lines();
-    let mut res: usize = 0;
-    for l in lines {
-        res += get_code(&l?)?;
-    }
+    let res: usize = io::BufReader::new(File::open(PATH)?)
+        .lines()
+        .map(|l| get_code(&l.unwrap()).unwrap())
+        .sum();
 
     println!("{}", res);
     Ok(())
